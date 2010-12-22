@@ -1,0 +1,534 @@
+----------------------------------------------------------
+0.download_data.cmd:
+----------------------------------------------------------
+function fetch {
+    if [ ! -f $1 ]; then
+	echo Fetching $1
+	curl http://download.wikipedia.org/enwiki/latest/$1 -o $1
+    else
+	echo $1 already exists
+    fi
+}
+
+fetch enwiki-latest-page.sql.gz
+fetch enwiki-latest-pagelinks.sql.gz
+fetch enwiki-latest-categorylinks.sql.gz
+fetch enwiki-latest-redirect.sql.gz
+rm /scratch/wiki/*.csv
+----------------------------------------------------------
+enwiki-latest-page.sql.gz already exists
+enwiki-latest-pagelinks.sql.gz already exists
+enwiki-latest-categorylinks.sql.gz already exists
+enwiki-latest-redirect.sql.gz already exists
+----------------------------------------------------------
+1.big_page.cmd:
+----------------------------------------------------------
+if [ ! -f /scratch/wiki/big_page.csv ]; then
+echo "unpacking big_page.csv..."
+
+time zcat enwiki-latest-page.sql.gz | \
+     ./sql2csv.pl | \
+     ./filter_page.pl >/scratch/wiki/big_page.csv
+
+fi
+----------------------------------------------------------
+unpacking big_page.csv...
+
+real	0m44.576s
+user	1m34.860s
+sys	0m6.470s
+----------------------------------------------------------
+2.small_page.cmd:
+----------------------------------------------------------
+time zcat enwiki-latest-categorylinks.sql.gz | \
+     ./sql2csv.pl | \
+     ./filter_categorylinks.pl >/scratch/wiki/small_page.csv
+----------------------------------------------------------
+reading page names...
+outputting pages which match categories...
+
+real	5m52.436s
+user	7m37.860s
+sys	0m17.700s
+----------------------------------------------------------
+3.redirect.cmd:
+----------------------------------------------------------
+if [ ! -f /scratch/wiki/big_redirect.csv ]; then
+echo "unpacking big_redirect.csv..."
+time zcat enwiki-latest-redirect.sql.gz | \
+     ./sql2csv.pl | \
+     ./filter_page.pl >/scratch/wiki/big_redirect.csv
+fi
+
+time ./filter_redirect.pl >/scratch/wiki/redirect.csv
+----------------------------------------------------------
+unpacking big_redirect.csv...
+
+real	0m15.774s
+user	0m24.720s
+sys	0m1.050s
+reading page names...
+  read 7967220 pages...
+reading bigredirect names...
+  read 4557297 redirects...
+reading small names...
+  read 390611 small names...
+hashing redirects...
+outputting redirects...
+writing smallredirect...
+rewriting small names, 89 removed...
+
+real	1m58.397s
+user	1m54.890s
+sys	0m3.500s
+----------------------------------------------------------
+4.pagelinks.cmd:
+----------------------------------------------------------
+if [ ! -f pagelinks.csv ]; then
+echo "unpacking pagelinks.csv..."
+time zcat enwiki-latest-pagelinks.sql.gz | \
+     ./sql2csv.pl | \
+     ./filter_page.pl >pagelinks.csv
+fi
+time ./filter_templatepagelinks.pl <pagelinks.csv >/scratch/wiki/templatepagelinks.csv
+time ./filter_ignorepagelinks.pl <pagelinks.csv >/scratch/wiki/ignorepagelinks.csv
+time ./filter_pagelinks.pl <pagelinks.csv >/scratch/wiki/goodpagelinks.csv
+time ./filter_fromlinks.pl >/scratch/wiki/fromlinks.csv
+time ./filter_redirect.pl >/scratch/wiki/redirect.csv
+----------------------------------------------------------
+reading page names...
+reading bigredirect names...
+reading small names...
+outputting pagelinks in template category...
+
+real	4m8.313s
+user	4m2.410s
+sys	0m5.820s
+reading redirect names...
+   read 483968 redirect entries
+reading small names...
+   read 390522 small entries
+reading template names...
+   read 128077 template entries
+   found 24734 target pages
+injesting pagelinks...
+   filled 22826 links
+writing pagelinks to ignore...
+
+real	12m48.758s
+user	11m58.160s
+sys	0m6.860s
+reading small names...
+   read 390522/390522 page entries
+reading ignore names...
+   read 114090 ignore entries
+reading redirect names...
+   read 483968 redirect entries
+injesting pagelinks...
+
+real	19m20.642s
+user	19m8.710s
+sys	0m8.470s
+reading good names...
+   read 243739/292636 link entries
+reading small names...
+  read 390522 small names...
+writing fromlinks...
+rewriting small names, 75743 removed...
+
+real	0m7.979s
+user	0m7.690s
+sys	0m0.270s
+reading page names...
+  read 7967220 pages...
+reading bigredirect names...
+  read 4557297 redirects...
+reading small names...
+  read 314779 small names...
+hashing redirects...
+outputting redirects...
+writing smallredirect...
+
+real	1m54.945s
+user	1m51.380s
+sys	0m3.450s
+----------------------------------------------------------
+5.gae_prepare.cmd:
+----------------------------------------------------------
+time ./filter_bulky.pl
+----------------------------------------------------------
+reading small names...
+  read 314779 small names...
+reading links names...
+   read 292636 link entries
+reading from names...
+   read 243739 from entries
+reading redirect names...
+   read 314779 redirect entries
+writing bulky data...
+
+real	0m15.599s
+user	0m14.920s
+sys	0m0.370s
+
+real	47m27.564s
+user	48m55.630s
+sys	0m54.050s
+----------------------------------------------------------
+0.download_data.cmd:
+----------------------------------------------------------
+function fetch {
+    if [ ! -f $1 ]; then
+	echo Fetching $1
+	curl http://download.wikipedia.org/enwiki/latest/$1 -o $1
+    else
+	echo $1 already exists
+    fi
+}
+
+fetch enwiki-latest-page.sql.gz
+fetch enwiki-latest-pagelinks.sql.gz
+fetch enwiki-latest-categorylinks.sql.gz
+fetch enwiki-latest-redirect.sql.gz
+rm /scratch/wiki/*.csv
+----------------------------------------------------------
+enwiki-latest-page.sql.gz already exists
+enwiki-latest-pagelinks.sql.gz already exists
+enwiki-latest-categorylinks.sql.gz already exists
+enwiki-latest-redirect.sql.gz already exists
+----------------------------------------------------------
+1.big_page.cmd:
+----------------------------------------------------------
+if [ ! -f /scratch/wiki/big_page.csv ]; then
+echo "unpacking big_page.csv..."
+
+time zcat enwiki-latest-page.sql.gz | \
+     ./sql2csv.pl | \
+     ./filter_page.pl >/scratch/wiki/big_page.csv
+
+fi
+----------------------------------------------------------
+unpacking big_page.csv...
+
+real	0m47.316s
+user	1m36.950s
+sys	0m6.230s
+----------------------------------------------------------
+2.small_page.cmd:
+----------------------------------------------------------
+time zcat enwiki-latest-categorylinks.sql.gz | \
+     ./sql2csv.pl | \
+     ./filter_categorylinks.pl >/scratch/wiki/small_page.csv
+----------------------------------------------------------
+reading page names...
+outputting pages which match categories...
+
+real	5m58.057s
+user	7m57.740s
+sys	0m18.870s
+----------------------------------------------------------
+3.redirect.cmd:
+----------------------------------------------------------
+if [ ! -f /scratch/wiki/big_redirect.csv ]; then
+echo "unpacking big_redirect.csv..."
+time zcat enwiki-latest-redirect.sql.gz | \
+     ./sql2csv.pl | \
+     ./filter_page.pl >/scratch/wiki/big_redirect.csv
+fi
+
+time ./filter_redirect.pl >/scratch/wiki/redirect.csv
+----------------------------------------------------------
+unpacking big_redirect.csv...
+
+real	0m15.844s
+user	0m25.180s
+sys	0m0.860s
+reading page names...
+  read 7967220 pages...
+reading bigredirect names...
+  read 4557297 redirects...
+reading small names...
+  read 400366 small names...
+hashing redirects...
+outputting redirects...
+writing smallredirect...
+rewriting small names, 123 removed...
+
+real	2m2.693s
+user	1m59.000s
+sys	0m3.690s
+----------------------------------------------------------
+4.pagelinks.cmd:
+----------------------------------------------------------
+if [ ! -f pagelinks.csv ]; then
+echo "unpacking pagelinks.csv..."
+time zcat enwiki-latest-pagelinks.sql.gz | \
+     ./sql2csv.pl | \
+     ./filter_page.pl >pagelinks.csv
+fi
+time ./filter_templatepagelinks.pl <pagelinks.csv >/scratch/wiki/templatepagelinks.csv
+time ./filter_ignorepagelinks.pl <pagelinks.csv >/scratch/wiki/ignorepagelinks.csv
+time ./filter_pagelinks.pl <pagelinks.csv >/scratch/wiki/goodpagelinks.csv
+time ./filter_fromlinks.pl >/scratch/wiki/fromlinks.csv
+time ./filter_redirect.pl >/scratch/wiki/redirect.csv
+----------------------------------------------------------
+reading page names...
+reading bigredirect names...
+reading small names...
+outputting pagelinks in template category...
+
+real	4m13.607s
+user	4m7.350s
+sys	0m6.250s
+reading redirect names...
+   read 505245 redirect entries
+reading small names...
+   read 400243 small entries
+reading template names...
+   read 133468 template entries
+   found 25525 target pages
+injesting pagelinks...
+   filled 23610 links
+writing pagelinks to ignore...
+
+real	12m25.668s
+user	12m21.000s
+sys	0m4.590s
+reading small names...
+   read 400243/400243 page entries
+reading ignore names...
+   read 119362 ignore entries
+reading redirect names...
+   read 505245 redirect entries
+injesting pagelinks...
+
+real	19m23.281s
+user	19m17.310s
+sys	0m5.890s
+reading good names...
+   read 253232/303193 link entries
+reading small names...
+  read 400243 small names...
+writing fromlinks...
+rewriting small names, 74974 removed...
+
+real	0m8.407s
+user	0m8.160s
+sys	0m0.250s
+reading page names...
+  read 7967220 pages...
+reading bigredirect names...
+  read 4557297 redirects...
+reading small names...
+  read 325269 small names...
+hashing redirects...
+outputting redirects...
+writing smallredirect...
+
+real	1m55.994s
+user	1m52.620s
+sys	0m3.380s
+----------------------------------------------------------
+5.gae_prepare.cmd:
+----------------------------------------------------------
+time ./filter_bulky.pl
+----------------------------------------------------------
+reading small names...
+  read 325269 small names...
+reading links names...
+   read 303193 link entries
+reading from names...
+   read 253232 from entries
+reading redirect names...
+   read 325269 redirect entries
+writing bulky data...
+
+real	0m15.776s
+user	0m15.370s
+sys	0m0.410s
+
+real	47m26.826s
+user	50m0.700s
+sys	0m50.540s
+----------------------------------------------------------
+0.download_data.cmd:
+----------------------------------------------------------
+function fetch {
+    if [ ! -f $1 ]; then
+	echo Fetching $1
+	curl http://dumps.wikimedia.org/enwiki/latest/$1 -o $1
+    else
+	echo $1 already exists
+    fi
+}
+
+fetch enwiki-latest-page.sql.gz
+fetch enwiki-latest-pagelinks.sql.gz
+fetch enwiki-latest-categorylinks.sql.gz
+fetch enwiki-latest-redirect.sql.gz
+rm ./*.csv
+----------------------------------------------------------
+enwiki-latest-page.sql.gz already exists
+enwiki-latest-pagelinks.sql.gz already exists
+enwiki-latest-categorylinks.sql.gz already exists
+enwiki-latest-redirect.sql.gz already exists
+rm: cannot remove `./*.csv': No such file or directory
+----------------------------------------------------------
+1.big_page.cmd:
+----------------------------------------------------------
+if [ ! -f ./big_page.csv ]; then
+echo "unpacking big_page.csv..."
+
+time zcat enwiki-latest-page.sql.gz | \
+     ./sql2csv.pl | \
+     ./filter_page.pl >./big_page.csv
+
+fi
+----------------------------------------------------------
+unpacking big_page.csv...
+
+real	0m59.408s
+user	2m0.328s
+sys	0m8.441s
+----------------------------------------------------------
+2.small_page.cmd:
+----------------------------------------------------------
+time zcat enwiki-latest-categorylinks.sql.gz | \
+     ./sql2csv.pl | \
+     ./filter_categorylinks.pl >./small_page.csv
+----------------------------------------------------------
+reading page names...
+outputting pages which match categories...
+
+real	8m20.277s
+user	11m42.116s
+sys	0m29.034s
+----------------------------------------------------------
+3.redirect.cmd:
+----------------------------------------------------------
+if [ ! -f ./big_redirect.csv ]; then
+echo "unpacking big_redirect.csv..."
+time zcat enwiki-latest-redirect.sql.gz | \
+     ./sql2csv.pl | \
+     ./filter_page.pl >./big_redirect.csv
+fi
+
+time ./filter_redirect.pl >./redirect.csv
+----------------------------------------------------------
+unpacking big_redirect.csv...
+
+real	0m15.401s
+user	0m28.266s
+sys	0m1.300s
+reading page names...
+  read 9729133 pages...
+reading bigredirect names...
+  read 5701221 redirects...
+reading small names...
+  read 550212 small names...
+hashing redirects...
+outputting redirects...
+writing smallredirect...
+rewriting small names, 255 removed...
+
+real	2m34.615s
+user	2m27.941s
+sys	0m6.524s
+----------------------------------------------------------
+4.pagelinks.cmd:
+----------------------------------------------------------
+if [ ! -f pagelinks.csv ]; then
+echo "unpacking pagelinks.csv..."
+time zcat enwiki-latest-pagelinks.sql.gz | \
+     ./sql2csv.pl | \
+     ./filter_page.pl >pagelinks.csv
+fi
+time ./filter_templatepagelinks.pl <pagelinks.csv >./templatepagelinks.csv
+time ./filter_ignorepagelinks.pl <pagelinks.csv >./ignorepagelinks.csv
+time ./filter_pagelinks.pl <pagelinks.csv >./goodpagelinks.csv
+time ./filter_fromlinks.pl >./fromlinks.csv
+time ./filter_redirect.pl >./redirect.csv
+----------------------------------------------------------
+unpacking pagelinks.csv...
+
+real	22m47.291s
+user	40m58.134s
+sys	1m30.574s
+reading page names...
+reading bigredirect names...
+reading small names...
+outputting pagelinks in template category...
+
+real	6m11.184s
+user	5m24.436s
+sys	0m14.033s
+reading redirect names...
+   read 659472 redirect entries
+reading small names...
+   read 549957 small entries
+reading template names...
+   read 229806 template entries
+   found 41455 target pages
+injesting pagelinks...
+   filled 36184 links
+writing pagelinks to ignore...
+
+real	15m24.120s
+user	15m2.824s
+sys	0m11.173s
+reading small names...
+   read 549957/549957 page entries
+reading ignore names...
+   read 173149 ignore entries
+reading redirect names...
+   read 659472 redirect entries
+injesting pagelinks...
+
+real	24m35.211s
+user	23m59.090s
+sys	0m12.169s
+reading good names...
+   read 352741/416062 link entries
+reading small names...
+  read 549957 small names...
+writing fromlinks...
+rewriting small names, 102224 removed...
+
+real	0m12.329s
+user	0m11.381s
+sys	0m0.576s
+reading page names...
+  read 9729133 pages...
+reading bigredirect names...
+  read 5701221 redirects...
+reading small names...
+  read 447733 small names...
+hashing redirects...
+outputting redirects...
+writing smallredirect...
+
+real	2m32.588s
+user	2m23.893s
+sys	0m6.556s
+----------------------------------------------------------
+5.gae_prepare.cmd:
+----------------------------------------------------------
+time ./filter_bulky.pl
+----------------------------------------------------------
+reading small names...
+  read 447733 small names...
+reading links names...
+   read 416062 link entries
+reading from names...
+   read 352741 from entries
+reading redirect names...
+   read 447733 redirect entries
+writing bulky data...
+
+real	0m28.298s
+user	0m26.954s
+sys	0m0.948s
+
+real	84m20.887s
+user	105m5.366s
+sys	3m1.327s

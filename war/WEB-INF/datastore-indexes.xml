@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes autoGenerate="false">
+
+  <datastore-index kind="Pi" ancestor="false" source="manual">
+    <property name="__key__" direction="desc"/>
+  </datastore-index>
+
+  <datastore-index kind="Pw" ancestor="false" source="manual">
+    <property name="__key__" direction="desc"/>
+  </datastore-index>
+  
+  <datastore-index kind="Pw" ancestor="false" source="manual">
+    <property name="w" direction="asc"/>
+    <property name="p" direction="desc"/>
+  </datastore-index>
+
+</datastore-indexes>

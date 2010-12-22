@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+ version="2.5"> 
+  
+  <!-- Main WikiHop Servlets -->
+  <servlet>
+	<servlet-name>searchPath</servlet-name>
+	<servlet-class>com.WikiHop.server.SearchPathRequest</servlet-class>
+  </servlet>
+  
+<!-- JSPC servlet mappings start -->
+
+    <servlet>
+        <servlet-name>org.apache.jsp.WikiHop_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.WikiHop_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.bulky.failed_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.bulky.failed_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.bulky.upload_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.bulky.upload_jsp</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.WikiHop_jsp</servlet-name>
+        <url-pattern>/WikiHop.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.bulky.failed_jsp</servlet-name>
+        <url-pattern>/bulky/failed.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.bulky.upload_jsp</servlet-name>
+        <url-pattern>/bulky/upload.jsp</url-pattern>
+    </servlet-mapping>
+
+<!-- JSPC servlet mappings end -->
+
+  <servlet-mapping>
+  	<servlet-name>searchPath</servlet-name>
+  	<url-pattern>/WikiHopPath/searchpath</url-pattern>
+  </servlet-mapping>
+ 
+  <servlet>
+	<servlet-name>wordOracle</servlet-name>
+	<servlet-class>com.WikiHop.server.WordOracleRequest</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>wordOracle</servlet-name>
+  	<url-pattern>/WikiHopPath/wordoracle</url-pattern>
+  </servlet-mapping>
+
+  <!-- RemoteApi (deprecated) -->
+  <servlet>
+    <servlet-name>remoteapi</servlet-name>
+    <servlet-class>com.google.apphosting.utils.remoteapi.RemoteApiServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>remoteapi</servlet-name>
+    <url-pattern>/remote_api</url-pattern>
+  </servlet-mapping>
+ 
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>remoteapi</web-resource-name>
+      <url-pattern>/remote_api</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+
+  <!-- New Bulk Loader from MapReduce -->
+
+  <servlet>
+    <servlet-name>mapreduce</servlet-name>
+    <servlet-class>com.google.appengine.tools.mapreduce.MapReduceServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>mapreduce</servlet-name>
+    <url-pattern>/mapreduce/*</url-pattern>
+  </servlet-mapping>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>mapreduce</web-resource-name>
+      <url-pattern>/mapreduce/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <servlet>
+    <servlet-name>Upload</servlet-name>
+    <servlet-class>com.WikiHop.bulky.UploadBlobServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>Upload</servlet-name>
+  	<url-pattern>/bulky/submit</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SuccessfulUpload</servlet-name>
+    <servlet-class>com.WikiHop.bulky.SuccessfulUploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>SuccessfulUpload</servlet-name>
+  	<url-pattern>/bulky/success</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Serve</servlet-name>
+    <servlet-class>com.WikiHop.bulky.ServeBlobServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>Serve</servlet-name>
+  	<url-pattern>/bulky/serve</url-pattern>
+  </servlet-mapping>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>upload-servlets</web-resource-name>
+      <url-pattern>/bulky/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>WikiHop.jsp</welcome-file>
+  </welcome-file-list>
+
+  </web-app>

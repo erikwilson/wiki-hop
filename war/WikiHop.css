@@ -1,0 +1,228 @@
+body,table td,select {
+	font-family: Arial Unicode MS, Arial, sans-serif;
+	font-size: small;
+}
+
+body {
+	color: black;
+	margin: 0px;
+	padding: 0px;
+	direction: ltr;
+}
+
+html {
+	padding: .5em;
+	overflow: scroll;
+}
+
+h1 {
+	font-size: 2em;
+	font-weight: bold;
+	color: #777777;
+	margin: 40px 0px 20px;
+	text-align: center;
+}
+
+hr {
+	background-color: #ccc;
+	height: 1px;
+	border: none;
+}
+
+img {
+	border-style: none;
+}
+
+.dialogVPanel {
+	margin: 5px;
+}
+
+.serverResponseLabelError {
+	font-size: 2em;
+	color: red;
+}
+
+* {
+	target-new: tab ! important
+}
+
+#logo {
+	float: left;
+	clear: left;
+	width: 150px;
+	height: 150px;
+	background-image: url('/wiki-hop.png');
+	background-repeat: no-repeat;
+}
+
+#wikiHopPath {
+	float: left;
+	margin-top: .5em;
+	margin-left: 1em;
+	font-size: 1.25em;
+	height: 8.5em;
+	width: 40em;
+	color: dimgray;
+	position: relative;
+}
+
+#center {
+	width: auto;
+	display: table;
+	margin: 0px auto;
+}
+
+#info {
+	clear: both;
+	font-size: 1.25em;
+	text-align: center;
+	color: dimgray;
+}
+
+#info a,#results a {
+	white-space: nowrap;
+	color: royalblue;
+}
+/*
+#sense {
+	margin: 0px auto;
+	height: 90px;
+	width: 728px;
+	overflow: hidden;
+}
+*/
+#disapprove {
+	font-size: 2em;
+	color: #666;
+}
+
+#adblock {
+	width: 728px;
+	position: absolute;
+	text-align: center;
+	color: #333;
+	white-space: nowrap;
+	display: none;
+	font-size: 1.5em;
+	z-index: 0;
+}
+
+#banner {
+/*	padding: 0.5em;*/
+	background-color: #f1f1f1;
+	text-align: center;
+}
+
+#results {
+	border: 1px solid lightgray;
+	padding: 1em;
+	margin-left: auto;
+	margin-right: auto;
+	color: dimgray;
+	text-align: center;
+	margin-top:0.618em;
+}
+
+#crumbs {
+	font-size: 2.5em;
+}
+
+#crumbs a {
+	color: darkblue;
+}
+
+.swap,.swapt {
+	cursor: pointer;
+}
+
+.swap {
+	margin-top: -.35em;
+	margin-bottom: -.2em;
+	font-size: 3em;
+}
+
+.gwt-TextBox-wiki {
+	position: relative;
+	display: block;
+	border: 1px solid red;
+	font-size: 0.8em;
+	padding: 3px;
+}
+
+.gwt-SuggestBox, .nojs-SuggestBox {
+	border: 1px solid #9c9;
+	font-size: 1.15em;
+	color: #333;
+}
+
+.nojs-SuggestBox {
+	padding: 2px;
+}
+
+.gwt-SuggestBoxPopup-wiki {
+	border: 1px solid #aaa;
+	background: white;
+}
+
+.gwt-SuggestBoxPopup-wiki .item {
+	font-size: 1.068em;
+	padding: 2px;
+	color: #424242;
+	cursor: default;
+}
+
+.gwt-SuggestBoxPopup-wiki .item-selected {
+	background: #b7d6f6;
+}
+
+a#graph_link {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+#graph_data {
+	display: none;
+	padding-left: 2em;
+	padding-right: 2em;
+	background-color: #fff;
+	margin: 0px auto;
+	color: #333;
+	border: 1px solid #ccc;
+	text-align: left;
+}
+
+#cached {
+	color: #ccc;
+	font-size: .5em;
+}
+
+#summary {
+	display: none;
+}
+
+#welcome {
+	font-size: 1em;
+	width: 55em;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
+}
+
+#readmore {
+	font-size: .8em;
+}
+
+#social-links {
+	color: #aaa;
+	text-align: center;
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+.showscript {
+	display: none; 
+}
+
+.popoutLink {
+	padding: 5px;
+}
