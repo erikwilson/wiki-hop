@@ -13,7 +13,7 @@ hosted at wiki-hop.
 
 ## todo
  * Convert to C and C++ libraries
- * Extend bi-directional search to 'n-directional' search.
+ * Extend bi-directional search to 'n-directional' search
  * New front-end
  * Automatic updates
  * Categorize and utilize all nodes
